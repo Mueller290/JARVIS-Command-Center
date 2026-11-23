@@ -1,3 +1,8 @@
+# JARVIS-Command-Center
+First department: Opportunity Watch Design: dark Iron Man-inspired interface with electric blue and cyan accents Platforms: Windows, Mac, iPhone, and iPad
+
+---
+
 # JARVIS Command Center — Foundation Preview
 
 This is the first implementation foundation for the existing `Mueller290/JARVIS-Command-Center` project. It is a responsive Next.js dashboard preview with a Supabase schema starter.
