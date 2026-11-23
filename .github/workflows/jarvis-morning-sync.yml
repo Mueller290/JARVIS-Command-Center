@@ -1,13 +1,13 @@
 # JARVIS morning sync.
 #
-# Calls the site's scheduled-sync endpoint once a day with a shared secret, so
-# the Watch panel is up to date before you look at it.
+# Put this at .github/workflows/jarvis-morning-sync.yml in the repository.
+# It calls the site's scheduled-sync endpoint once a day with a shared secret.
 #
 # Setup, once:
-#   1. Repository -> Settings -> Secrets and variables -> Actions -> New
-#      repository secret, named JARVIS_SYNC_SECRET, value = the secret set on
-#      the site as SYNC_SECRET.
-#   2. Actions tab -> "JARVIS morning sync" -> Run workflow, to test by hand.
+#   1. Repository → Settings → Secrets and variables → Actions → New repository
+#      secret, named JARVIS_SYNC_SECRET, value = the same secret set on the site
+#      as SYNC_SECRET.
+#   2. Actions tab → "JARVIS morning sync" → Run workflow, to test it by hand.
 #
 # 13:00 UTC is 6:00 AM in Arizona (UTC-7, no daylight saving). Change the hour
 # in the cron line for a different local time.
@@ -46,3 +46,6 @@ jobs:
           echo "status: $status"
           echo "body: $body"
           test "$status" = "200"
+          # Fail the job when any account needs reconnecting, so the weekly
+          # Google token expiry shows up as a red run rather than a silent gap.
+          printf '%s' "$body" | grep -q '"failed":0'
