@@ -1,8 +1,8 @@
-import { createBrowzerClient } from '@supabase/ssr';
+import { createBrowserClient } from '@supabase/ssr';
 
-export function createSupabaseBrowzerClient() {
+export function createSupabaseBrowserClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !anonKey) throw new Error('Supabase env variables are not configured.');
-  return createBrowzerClient(url, anonKey);
+  if (!url || !anonKey) throw new Error('Supabase environment variables are not configured.');
+  return createBrowserClient(url, anonKey);
 }
