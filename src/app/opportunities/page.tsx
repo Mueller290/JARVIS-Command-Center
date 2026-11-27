@@ -106,7 +106,7 @@ export default function OpportunityWatchPage() {
     <main className="opportunity-shell">
       <header className="opportunity-topbar">
         <Link href="/" className="back-link"><ArrowLeft size={16}/> Command dashboard</Link>
-        <span className="preview-label"><i/> OPPORTUNITY WATCH · PREVIEW</span>
+        <span className="preview-label"><i/> OPPORTUNITY WATCH · {storageState === 'ready' ? 'CONNECTED' : 'SETUP REQUIRED'}</span>
       </header>
       <div className="opportunity-content">
         <div className="opportunity-intro">
@@ -115,7 +115,7 @@ export default function OpportunityWatchPage() {
             <h1>Opportunity Watch</h1>
             <p>Keep potential jobs, contracts, grants, and partnerships organized before you take action.</p>
           </div>
-          <button className="add-opportunity-button" onClick={() => setShowForm(value => !value)}><Plus size={16}/> Add a listing</button>
+          <button className="add-opportunity-button" disabled={storageState !== "ready"} onClick={() => setShowForm(value => !value)}><Plus size={16}/> Add a listing</button>
         </div>
 
         <div className="opportunity-safety-note"><ShieldCheck size={18}/><div><b>You stay in control.</b><span>JARVIS will not apply, bid, contact an organization, accept terms, or spend money. Any future external action must be separately approved by you.</span></div></div>
@@ -141,13 +141,13 @@ export default function OpportunityWatchPage() {
 
         <div className="watch-message"><ShieldAlert size={16}/>{message}</div>
 
-        <div className="watch-section-heading"><div><h2>Your opportunity library</h2><p>{filtered.length} saved {filtered.length === 1 ? 'record' : 'records'} · No live search is connected yet</p></div><span className="review-counter"><BriefcaseBusiness size={14}/>{items.length} saved</span></div>
+        <div className="watch-section-heading"><div><h2>Your opportunity library</h2><p>{filtered.length} saved {filtered.length === 1 ? 'record' : 'records'} · {storageState === 'ready' ? 'Private storage connected' : 'Private storage not connected'}</p></div><span className="review-counter"><BriefcaseBusiness size={14}/>{items.length} saved</span></div>
 
         {filtered.length === 0 ? <section className="watch-empty">
           <div className="empty-search-icon"><Search size={24}/></div>
-          <h3>{items.length === 0 ? 'Your watchlist is ready' : 'No matching listings'}</h3>
-          <p>{items.length === 0 ? 'Add an opportunity you find online. Keep its original source link and review its requirements before deciding what to do.' : 'Try another search term or change the category filter.'}</p>
-          {items.length === 0 && <button className="add-opportunity-button" onClick={() => setShowForm(true)}><Plus size={16}/> Add your first listing</button>}
+          <h3>{items.length === 0 ? 'Connect your private watchlist' : 'No matching listings'}</h3>
+          <p>{items.length === 0 ? 'Finish Supabase project setup and sign in to save opportunities across devices and page refreshes.' : 'Try another search term or change the category filter.'}</p>
+          {items.length === 0 && storageState === 'ready' && <button className="add-opportunity-button" onClick={() => setShowForm(true)}><Plus size={16}/> Add your first listing</button>}
         </section> : <div className="saved-opportunities">{filtered.map(item => <article className="saved-opportunity" key={item.id}>
           <div className="saved-opportunity-icon"><Building2 size={19}/></div>
           <div className="saved-opportunity-body"><div className="saved-opportunity-tags"><span>{item.category}</span><span className="unverified-tag">Not independently verified</span></div><h3>{item.title}</h3><p>{item.organization} · {item.location}</p>{item.notes && <p className="saved-notes">{item.notes}</p>}<div className="saved-meta">{item.deadline && <span><CalendarDays size={13}/> Deadline: {item.deadline}</span>}<span><Link2 size={13}/> Original source saved</span></div></div>
