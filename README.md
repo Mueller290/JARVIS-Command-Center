@@ -1,41 +1,32 @@
-# JARVIS-Command-Center
-First department: Opportunity Watch Design: dark Iron Man-inspired interface with electric blue and cyan accents Platforms: Windows, Mac, iPhone, and iPad
+# JARVIS Command Center
 
----
+Responsive personal command-center foundation for Windows, macOS, iPhone, iPad, and Android/Samsung devices.
 
-# JARVIS Command Center — Foundation Preview
+## Four core foundations
+1. **AI chat connection:** authenticated server-side OpenAI chat endpoint. The API key stays on the server.
+2. **Private memory:** Supabase memory is user-scoped with row-level security. Memory is OFF by default; the user must opt in, and can clear saved memory from the assistant screen.
+3. **Approval foundation:** the database includes owner-scoped approval requests and a decision function. Recording approval does not execute an external action. No external action is currently connected.
+4. **Voice:** browser speech recognition for voice input and speech synthesis for spoken replies. Availability depends on browser/device permissions.
 
-This is the first implementation foundation for the existing `Mueller290/JARVIS-Command-Center` project. It is a responsive Next.js dashboard preview with a Supabase schema starter.
+## Setup
+1. Use Node.js 20 or newer; run `npm install`.
+2. Copy `.env.example` to `.env.local` and set the Supabase project URL and anon key.
+3. Review and apply the SQL migrations in `supabase/migrations` in order to a fresh Supabase project. The repository currently has migration 0001 and 0003; there is no 0002 file, so confirm migration history before applying 0003 to an existing database.
+4. Configure `OPENAI_API_KEY` only as a server-side Vercel environment variable if you choose to activate paid API usage. Never expose it in browser code.
+5. Configure Supabase Auth email/password settings and redirect URLs for the deployed site.
+6. Run `npm run lint` and `npm run build`, deploy to HTTPS, then test sign-up, sign-in, private data isolation, memory opt-in/clear, microphone permission, and spoken replies.
 
-## Included
-- Responsive JARVIS-themed dashboard and navigation
-- Opportunity Watch and Approval Center preview panels
-- Business module overview
-- Next.js / React / TypeScript project configuration
-- Supabase browser-client entry point
-- Initial PostgreSQL schema with owner-scoped RLS policies
-- Approval decision RPC that records a decision but does not perform an external action
+## Safety and privacy
+- Never commit .env files or secrets. Never ask users to paste API keys or passwords into chat.
+- Memory is opt-in and off by default. Clearing memory permanently deletes the signed-in user's rows from `jarvis_memory`.
+- Approval status is not execution permission. Any future external action must check a fresh, user-specific approval server-side immediately before execution.
+- No applications, bids, messages, purchases, publishing, or destructive actions are executed by this starter assistant.
+- Do not store protected health information in this general-purpose workspace.
 
-## Not yet implemented
-- Real authentication screens or protected routes
-- Supabase migration execution or live database connection
-- Real opportunity discovery, verification, or submissions
-- Voice processing, AI command execution, integrations, notifications
-- MFA enforcement, desktop/mobile native packaging, deployment
+## Install on devices
+After deployment to a public HTTPS address:
+- Android/Samsung: open in Chrome and choose Install app or Add to Home screen.
+- iPhone/iPad: open in Safari, Share, then Add to Home Screen.
+- Windows/macOS: open in Edge/Chrome and choose Install when offered.
 
-The dashboard deliberately labels itself as a preview and does not pretend that live actions are connected.
-
-## Run locally
-1. Install Node.js 20 or newer.
-2. Copy `.env.example` to `.env.local` and fill in the Supabase project URL and anon key when available.
-3. Run `npm install`.
-4. Run `npm run dev` and open the local address shown in the terminal.
-
-## Database
-Review `supabase/migrations/0001_initial_schema.sql` before applying it to a new Supabase project. It uses PostgreSQL 15's column-list form of `ON DELETE SET NULL`. Test the migration and RLS with at least two separate user accounts before using real data.
-
-## Security notes
-- Never commit `.env.local` or any secrets.
-- Never expose the Supabase service-role key or OpenAI API key to browser code.
-- Approval records are not execution permissions. Any external action must independently check a fresh approval server-side immediately before execution.
-- Do not store protected health information in this general-purpose workspace. Keep any clinical workflow in a separately designed compliant system.
+These are PWA installs, not native app-store packages. No production URL or native desktop installer is included yet.
