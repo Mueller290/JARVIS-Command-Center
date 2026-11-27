@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { LogoutButton } from '@/components/logout-button';
 import {
   Activity, AlertTriangle, ArrowUpRight, Bell, BriefcaseBusiness, CheckCircle2,
   ChevronRight, CircleHelp, Command, FileCheck2, FolderOpen, LayoutDashboard,
@@ -50,11 +51,11 @@ export default function Home() {
       <div className="brand"><div className="brand-mark"><Command size={21}/></div><div><strong>JARVIS</strong><span>COMMAND CENTER</span></div><button className="mobile-close icon-button" onClick={() => setMobileOpen(false)} aria-label="Close menu"><X/></button></div>
       <div className="workspace-label">WORKSPACE</div>
       <nav>{nav.map(item => { const Icon = item.icon; return <button key={item.label} className={`nav-item ${active === item.label ? 'selected' : ''}`} onClick={() => {setActive(item.label);setMobileOpen(false);}}><Icon size={18}/><span>{item.label}</span>{active === item.label && <span className="nav-dot"/>}</button>; })}</nav>
-      <div className="sidebar-bottom"><div className="secure-card"><LockKeyhole size={17}/><div><b>Private workspace</b><span>Security setup pending</span></div></div><button className="nav-item"><Settings size={18}/>Settings & Security</button><div className="profile"><div className="avatar">A</div><div><b>Workspace owner</b><span>Local preview</span></div><ChevronRight size={16}/></div></div>
+      <div className="sidebar-bottom"><div className="secure-card"><LockKeyhole size={17}/><div><b>Private workspace</b><span>Authenticated workspace</span></div></div><button className="nav-item"><Settings size={18}/>Settings & Security</button><div className="profile"><div className="avatar">A</div><div><b>Signed-in user</b><span>Secure session</span></div><ChevronRight size={16}/></div></div>
     </aside>
     {mobileOpen && <button className="scrim" onClick={() => setMobileOpen(false)} aria-label="Close navigation"/>}
     <section className="main-area">
-      <header className="topbar"><button className="icon-button mobile-menu" onClick={() => setMobileOpen(true)} aria-label="Open menu"><Menu/></button><div className="breadcrumb">Workspace <ChevronRight size={14}/> <b>{active}</b></div><div className="top-actions"><span className="system-status"><i/> FOUNDATION PREVIEW</span><button className="icon-button" aria-label="Help"><CircleHelp size={18}/></button><button className="icon-button" aria-label="Notifications"><Bell size={18}/></button></div></header>
+      <header className="topbar"><button className="icon-button mobile-menu" onClick={() => setMobileOpen(true)} aria-label="Open menu"><Menu/></button><div className="breadcrumb">Workspace <ChevronRight size={14}/> <b>{active}</b></div><div className="top-actions"><span className="system-status"><i/> FOUNDATION PREVIEW</span><button className="icon-button" aria-label="Help"><CircleHelp size={18}/></button><button className="icon-button" aria-label="Notifications"><Bell size={18}/></button><LogoutButton/></div></header>
       <div className="content">
         <div className="welcome-row"><div><div className="eyebrow"><Sparkles size={14}/> PERSONAL COMMAND ENVIRONMENT</div><h1>Good evening.</h1><p className="muted">Your workspace is taking shape. Here’s your command overview.</p></div><div className="date-chip"><Activity size={16}/> System foundation · Phase 1</div></div>
         <div className="notice"><AlertTriangle size={17}/><span>{notice}</span></div>
