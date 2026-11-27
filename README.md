@@ -39,3 +39,17 @@ Review `supabase/migrations/0001_initial_schema.sql` before applying it to a new
 - Never expose the Supabase service-role key or OpenAI API key to browser code.
 - Approval records are not execution permissions. Any external action must independently check a fresh approval server-side immediately before execution.
 - Do not store protected health information in this general-purpose workspace. Keep any clinical workflow in a separately designed compliant system.
+
+## Install on phone, tablet, or computer
+
+The project now includes a Progressive Web App (PWA) manifest. After the web app is deployed to a public HTTPS address, it can be installed from a supported browser:
+
+- **Android / Samsung tablet:** open the HTTPS site in Chrome, then use the browser menu and choose **Install app** or **Add to Home screen**.
+- **iPhone / iPad:** open the HTTPS site in Safari, tap **Share**, then **Add to Home Screen**.
+- **Windows / macOS computer:** open the HTTPS site in Edge or Chrome and use the browser's **Install** option when it appears.
+
+This installs the web app as an app-like shortcut; it is not yet a native Windows/macOS installer or an App Store / Play Store app. The app must first be deployed and tested over HTTPS. The current repository does not yet have a confirmed production URL.
+
+## Desktop companion status
+
+See [desktop/README.md](desktop/README.md) for the Windows/macOS native companion scope and release checklist. The native installers are not built yet.
