@@ -11,6 +11,7 @@ import {
 
 type NavItem = { label: string; icon: typeof LayoutDashboard };
 const nav: NavItem[] = [
+  { label: 'JARVIS AI Assistant', icon: Sparkles },
   { label: 'Command Dashboard', icon: LayoutDashboard },
   { label: 'Opportunity Watch', icon: Search },
   { label: 'Verification Center', icon: ShieldCheck },
