@@ -67,7 +67,7 @@ export default function OpportunityWatchPage() {
     return matchesText && matchesCategory;
   }), [items, search, category]);
 
-  function addOpportunity(event: React.FormEvent<HTMLFormElement>) {
+  async function addOpportunity(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!title.trim() || !url.trim()) {
       setMessage('Please add a listing title and its original URL.');
@@ -81,26 +81,25 @@ export default function OpportunityWatchPage() {
       setMessage('Enter a valid original web address beginning with https://');
       return;
     }
-    const record: Opportunity = {
-      id: Date.now(),
-      title: title.trim(),
-      organization: organization.trim() || 'Organization not entered',
-      category: formCategory,
-      location: region.trim() || 'Location not specified',
-      url: parsed.toString(),
-      deadline,
-      notes: notes.trim(),
-      status: 'Needs review'
-    };
+    if (!supabase || storageState !== 'ready') { setMessage('Connect Supabase and sign in before saving.'); return; }
+    const auth = await supabase.auth.getUser();
+    if (!auth.data.user) { setMessage('Sign in before saving private opportunities.'); return; }
+    const payload = { owner_id: auth.data.user.id, title: title.trim(), organization_name: organization.trim() || 'Organization not entered', category: formCategory, location: region.trim() || 'Location not specified', source_url: parsed.toString(), deadline: deadline || null, eligibility_notes: notes.trim() || null, verification_status: 'needs_review', workflow_status: 'discovered' };
+    const saved = await supabase.from('opportunities').insert(payload).select('id').single();
+    if (saved.error || !saved.data) { setMessage('Could not save listing: ' + (saved.error?.message || 'Unknown error')); return; }
+    const record: Opportunity = { id: saved.data.id, title: payload.title, organization: payload.organization_name, category: payload.category, location: payload.location, url: payload.source_url, deadline: deadline, notes: notes.trim(), status: 'Needs review' };
     setItems(current => [record, ...current]);
     setTitle(''); setOrganization(''); setUrl(''); setDeadline(''); setNotes('');
     setShowForm(false);
     setMessage('Listing added to this page for your review. Its details and legitimacy have not been independently verified.');
   }
 
-  function removeOpportunity(id: number) {
+  async function removeOpportunity(id: string) {
+    if (!supabase || storageState !== 'ready') return;
+    const result = await supabase.from('opportunities').delete().eq('id', id);
+    if (result.error) { setMessage('Could not remove listing: ' + result.error.message); return; }
     setItems(current => current.filter(item => item.id !== id));
-    setMessage('The review record was removed from this page.');
+    setMessage('The saved review record was removed from your private library.');
   }
 
   return (
