@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { createSupabaseBrowserClient } from '@/lib/supabase/client';
 import {
   ArrowLeft, ArrowUpRight, BadgeCheck, BriefcaseBusiness, Building2, CalendarDays,
   ExternalLink, Filter, Globe2, Link2, MapPin, Plus, Search, ShieldAlert,
@@ -9,7 +10,7 @@ import {
 import Link from 'next/link';
 
 type Opportunity = {
-  id: number;
+  id: string;
   title: string;
   organization: string;
   category: string;
@@ -21,10 +22,12 @@ type Opportunity = {
 };
 
 const categories = ['All categories', 'Medical Assistant / CCMA', 'Phlebotomy', 'Mobile phlebotomy', 'Grants & funding', 'Government contracts', 'Graphic design', 'Data analytics', 'Web development', 'Education & content'];
-const initialItems: Opportunity[] = [];
+type SavedRow = { id: string; title: string; organization_name: string; category: string | null; location: string | null; source_url: string; deadline: string | null; eligibility_notes: string | null; workflow_status: string; };
 
 export default function OpportunityWatchPage() {
-  const [items, setItems] = useState<Opportunity[]>(initialItems);
+  const [items, setItems] = useState<Opportunity[]>([]);
+  const [supabase] = useState(() => { try { return createSupabaseBrowserClient(); } catch { return null; } });
+  const [storageState, setStorageState] = useState('loading');
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All categories');
   const [region, setRegion] = useState('Phoenix, AZ');
@@ -36,6 +39,27 @@ export default function OpportunityWatchPage() {
   const [formCategory, setFormCategory] = useState(categories[1]);
   const [message, setMessage] = useState('Manual collection is ready. Add a listing URL to create a review record.');
   const [showForm, setShowForm] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadSaved() {
+      if (!supabase) { setStorageState('unconfigured'); setMessage('Supabase project URL and anon key are not configured yet.'); return; }
+      try {
+        const auth = await supabase.auth.getUser();
+        if (auth.error) throw auth.error;
+        if (!auth.data.user) { setStorageState('signed-out'); setMessage('Sign in is required before saving private opportunities.'); return; }
+        const result = await supabase.from('opportunities').select('id,title,organization_name,category,location,source_url,deadline,eligibility_notes,workflow_status').order('created_at', { ascending: false });
+        if (result.error) throw result.error;
+        if (cancelled) return;
+        const rows = (result.data || []) as SavedRow[];
+        setItems(rows.map(row => ({ id: row.id, title: row.title, organization: row.organization_name, category: row.category || 'Other', location: row.location || 'Location not specified', url: row.source_url, deadline: row.deadline || '', notes: row.eligibility_notes || '', status: row.workflow_status === 'saved' ? 'Saved' : 'Needs review' })));
+        setStorageState('ready');
+        setMessage('Private Supabase opportunity library connected.');
+      } catch (error) { if (!cancelled) { setStorageState('error'); setMessage('Supabase could not load the opportunity library. Check project setup and database migration.'); } }
+    }
+    void loadSaved();
+    return () => { cancelled = true; };
+  }, [supabase]);
 
   const filtered = useMemo(() => items.filter(item => {
     const matchesText = [item.title, item.organization, item.location, item.notes].join(' ').toLowerCase().includes(search.toLowerCase());
