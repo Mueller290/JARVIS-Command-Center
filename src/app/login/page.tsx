@@ -15,7 +15,7 @@ export default function LoginPage() {
       const next = params.get('next');
       const safeNext = next && next.startsWith('/') && !next.startsWith('//') ? next : '/';
       const redirectTo = window.location.origin + '/auth/callback?next=' + encodeURIComponent(safeNext);
-      const { error } = await supabase.auth.signInWithOtp({ email: email.trim(), options: { emailRedirectTo: redirectTo } });
+      const { error } = await supabase.auth.signInWithOtp({ email: email.trim(), options: { emailRedirectTo: redirectTo, shouldCreateUser: false } });
       if (error) throw error;
       setMessage('Check your email for the sign-in link. Return here after opening it.');
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Unable to send the sign-in link. Check Supabase configuration.'); }
