@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export default function AuthErrorPage(){return <main style={{minHeight:'100vh',display:'grid',placeItems:'center',background:'#080d18',color:'#edf3ff',padding:24}}><section style={{maxWidth:420,padding:32,background:'#0e1828',border:'1px solid #294057',borderRadius:16}}><h1>Confirmation link unavailable</h1><p style={{color:'#91a0b8'}}>This link may have expired or already been used. Return to sign in or request another password reset.</p><Link href="/login" style={{color:'#70dff4'}}>Return to sign in</Link></section></main>}

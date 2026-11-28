@@ -40,6 +40,7 @@ create table if not exists public.opportunities (
   discovered_at timestamptz not null default now(),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
+  unique (id, owner_id),
   constraint opportunities_org_owner_fk foreign key (organization_id, owner_id)
     references public.organizations(id, owner_id) on delete set null (organization_id)
 );
