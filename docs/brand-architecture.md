@@ -2,9 +2,11 @@
 
 ## Parent identity
 
-**Aliyah Mueller Enterprises** is the proposed umbrella brand for the founder's portfolio of businesses, products, and internal platforms.
+**Aliyah Mueller Enterprises** is the umbrella brand for the founder's portfolio of businesses, products, and internal platforms.
 
 **Positioning:** One coordinated business group. Distinct brands. Shared operations.
+
+**Primary corporate domain:** https://aliyahmuellerenterprises.com
 
 **Suggested public descriptor:** A multi-brand business group building services, technology, creative products, commerce, and education.
 
@@ -30,7 +32,7 @@
 
 ## Domain and deployment convention
 
-The parent company should have one primary corporate domain. Individual brands may retain their existing domains and use clearly labeled links or subdomains where appropriate. Do not replace existing domains, change DNS, or update production redirect settings until the new domain is purchased, verified, and approved by the owner.
+The parent company's registered primary domain is **aliyahmuellerenterprises.com**. Individual brands may retain their existing domains and use clearly labeled links or subdomains where appropriate. Keep the former Aliyahmuellerwork.com address available during migration until hosting, DNS, certificates, redirects, and authentication have been tested. Do not cancel, transfer, or disconnect the old domain until the new domain is verified end-to-end.
 
 ## Legal and operational note
 
@@ -38,12 +40,12 @@ This document defines a proposed brand and technology structure only. It does **
 
 ## Rollout checklist
 
-- [ ] Confirm the parent brand name and public descriptor.
-- [ ] Check state entity-name and trademark conflicts.
-- [ ] Select and register an approved parent-company domain.
+- [x] Confirm the parent brand name and public descriptor.
+- [x] Select and register an approved parent-company domain.
+- [ ] Verify DNS, HTTPS certificate, and website hosting for the new domain.
 - [ ] Map each existing app, account, domain, and integration to its business division.
 - [ ] Update the JARVIS portal branding and portfolio navigation.
-- [ ] Configure production hosting and Supabase Auth URLs only after domain verification.
+- [ ] Configure production hosting and Supabase Auth URLs after DNS and hosting are verified.
 - [ ] Update Canva brand assets and templates.
 - [ ] Update Shopify store footer/about references where appropriate.
 - [ ] Update business profiles, invoices, email signatures, and social profiles after legal and brand review.
@@ -51,4 +53,4 @@ This document defines a proposed brand and technology structure only. It does **
 
 ## Current implementation status
 
-This architecture is documented in the JARVIS repository. It is not yet deployed to production or propagated to connected third-party apps. Existing brands and production settings remain unchanged until individually reviewed and approved.
+The parent-company domain is registered and documented. The JARVIS repository's sample environment file now points to the new domain on the feature branch. This is a development configuration/documentation change only; it does not change production hosting, DNS, Supabase Auth settings, or connected third-party applications. Existing brands and production settings remain unchanged until individually reviewed and verified.
