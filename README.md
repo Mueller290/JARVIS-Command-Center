@@ -12,7 +12,7 @@ The `codex/jarvis-five-systems` branch contains the first interactive five-syste
 - **Company Knowledge** — capture company reference notes and operating policies.
 - **Approval Center** — record action requests for owner review.
 
-The interface preserves the existing JARVIS dark/cyan visual direction. The current browser UI saves records in that browser's local storage only. It is a development workspace, **not yet a cloud-synced, authenticated production application**.
+The interface preserves the existing JARVIS dark/cyan visual direction. The owner sign-in foundation now uses Supabase Auth magic links, cookie-backed server sessions, and route protection when Supabase environment variables are configured. The five-system records still save in browser local storage only; authenticated cloud data sync is not yet connected. Without environment variables, the app intentionally opens in a clearly labeled local preview mode.
 
 ## Supabase database
 
@@ -23,7 +23,7 @@ The database migrations are cumulative and intended for a fresh project:
 
 The second migration adds owner-scoped tables for projects, tasks, financial entries, website properties, and company knowledge, plus approval scope/expiry/consumption fields. Row-level security is enabled.
 
-Applying migrations does not by itself connect the UI to Supabase. Authentication, server-side data access, approval execution gates, and integration tests remain required before real company data or external actions are enabled.
+The live JARVIS Supabase project currently has its initial owner-scoped schema migrations recorded. The five-system migration in this branch has not been applied to that live project. Do not apply it until it has been reviewed against the live schema. Authentication is implemented in this branch, but the five-system UI is not yet connected to cloud tables.
 
 ## Run locally
 
@@ -35,12 +35,12 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open the local URL printed by Next.js. Supabase variables can be filled in after configuring a Supabase project:
+Open the local URL printed by Next.js. Set these environment variables in `.env.local` and in the eventual hosting provider's server/build environment:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-Never place service-role keys or AI provider secrets in browser code or commit `.env.local`.
+Configure the Supabase Auth URL allow-list to include your local callback (for example `http://localhost:3000/auth/callback`) and the eventual deployed callback URL. The sign-in page sends a magic link to the owner email. Never place service-role keys or AI provider secrets in browser code or commit `.env.local`.
 
 ## Safety and company boundaries
 
@@ -53,11 +53,11 @@ Never place service-role keys or AI provider secrets in browser code or commit `
 
 ## Not yet complete
 
-- Supabase sign-in, session management, protected routes, and live UI/database sync.
+- Live UI/database sync for the five operating systems.
 - Server-side approval enforcement and external action execution.
 - Company Knowledge retrieval integrated into an AI assistant.
 - Live website monitoring, analytics, and opportunity discovery.
 - Full financial ledger/reporting and reconciliation.
-- Automated functional/browser tests, verified production build, and deployment.
+- Automated functional/browser tests and deployment. CI type-check/build must pass after the authentication changes.
 
 Do not treat this development increment as production-ready until these items are implemented and tested.
