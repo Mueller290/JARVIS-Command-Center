@@ -1,41 +1,63 @@
-# JARVIS-Command-Center
-First department: Opportunity Watch Design: dark Iron Man-inspired interface with electric blue and cyan accents Platforms: Windows, Mac, iPhone, and iPad
+# JARVIS Command Center
 
----
+A dark, responsive command workspace for the planned Aliyah Mueller Enterprises operating environment.
 
-# JARVIS Command Center — Foundation Preview
+## Current development status
 
-This is the first implementation foundation for the existing `Mueller290/JARVIS-Command-Center` project. It is a responsive Next.js dashboard preview with a Supabase schema starter.
+The `codex/jarvis-five-systems` branch contains the first interactive five-system workspace increment:
 
-## Included
-- Responsive JARVIS-themed dashboard and navigation
-- Opportunity Watch and Approval Center preview panels
-- Business module overview
-- Next.js / React / TypeScript project configuration
-- Supabase browser-client entry point
-- Initial PostgreSQL schema with owner-scoped RLS policies
-- Approval decision RPC that records a decision but does not perform an external action
+- **Business HQ** — capture division, project, task, and priority records.
+- **Financial Command** — capture financial planning notes and distinguish planned items from verified records.
+- **Website Command** — maintain a working inventory of digital properties and website issues.
+- **Company Knowledge** — capture company reference notes and operating policies.
+- **Approval Center** — record action requests for owner review.
 
-## Not yet implemented
-- Real authentication screens or protected routes
-- Supabase migration execution or live database connection
-- Real opportunity discovery, verification, or submissions
-- Voice processing, AI command execution, integrations, notifications
-- MFA enforcement, desktop/mobile native packaging, deployment
+The interface preserves the existing JARVIS dark/cyan visual direction. The owner sign-in foundation now uses Supabase Auth magic links, cookie-backed server sessions, and route protection when Supabase environment variables are configured. The five-system records still save in browser local storage only; authenticated cloud data sync is not yet connected. Without environment variables, the app intentionally opens in a clearly labeled local preview mode.
 
-The dashboard deliberately labels itself as a preview and does not pretend that live actions are connected.
+## Supabase database
+
+The database migrations are cumulative and intended for a fresh project:
+
+1. Review and apply `supabase/migrations/0001_initial_schema.sql`.
+2. Review and apply `supabase/migrations/0002_five_systems.sql`.
+
+The second migration adds owner-scoped tables for projects, tasks, financial entries, website properties, and company knowledge, plus approval scope/expiry/consumption fields. Row-level security is enabled.
+
+The live JARVIS Supabase project currently has its initial owner-scoped schema migrations recorded. The five-system migration in this branch has not been applied to that live project. Do not apply it until it has been reviewed against the live schema. Authentication is implemented in this branch, but the five-system UI is not yet connected to cloud tables.
 
 ## Run locally
-1. Install Node.js 20 or newer.
-2. Copy `.env.example` to `.env.local` and fill in the Supabase project URL and anon key when available.
-3. Run `npm install`.
-4. Run `npm run dev` and open the local address shown in the terminal.
 
-## Database
-Review `supabase/migrations/0001_initial_schema.sql` before applying it to a new Supabase project. It uses PostgreSQL 15's column-list form of `ON DELETE SET NULL`. Test the migration and RLS with at least two separate user accounts before using real data.
+Requirements: Node.js 22 or newer.
 
-## Security notes
-- Never commit `.env.local` or any secrets.
-- Never expose the Supabase service-role key or OpenAI API key to browser code.
-- Approval records are not execution permissions. Any external action must independently check a fresh approval server-side immediately before execution.
-- Do not store protected health information in this general-purpose workspace. Keep any clinical workflow in a separately designed compliant system.
+```bash
+npm install
+cp .env.example .env.local
+npm run dev
+```
+
+Open the local URL printed by Next.js. Set these environment variables in `.env.local` and in the eventual hosting provider's server/build environment:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+Configure the Supabase Auth URL allow-list to include your local callback (for example `http://localhost:3000/auth/callback`) and the eventual deployed callback URL. The sign-in page sends a magic link only to an existing Supabase Auth user (`shouldCreateUser: false`); self-service account creation is disabled in the app. Create/invite the owner account in Supabase first and disable public sign-ups in Auth settings. Never place service-role keys or AI provider secrets in browser code or commit `.env.local`.
+
+## Safety and company boundaries
+
+- The planned company blueprint is not proof that the LLC has been legally formed, a service is licensed, a domain is registered, or revenue has been earned.
+- Crowned by Grace Photography remains completely separate from the parent-company structure and consolidated reporting.
+- Financial goals and planning allocations are not actual revenue, profit, or cash.
+- The Approval Center currently records requests only. An approval row is not permission to execute an external action. Any future executor must independently verify a fresh, unexpired, action-scoped approval server-side immediately before execution and record the result.
+- Do not store protected health information in this general-purpose workspace. Any clinical workflow needs a separately designed compliant system.
+- No paid services, purchases, legal filings, production publishing, DNS changes, or external commitments are authorized by this code change.
+
+## Not yet complete
+
+- Live UI/database sync for the five operating systems.
+- Server-side approval enforcement and external action execution.
+- Company Knowledge retrieval integrated into an AI assistant.
+- Live website monitoring, analytics, and opportunity discovery.
+- Full financial ledger/reporting and reconciliation.
+- Automated functional/browser tests and deployment. CI type-check/build must pass after the authentication changes.
+
+Do not treat this development increment as production-ready until these items are implemented and tested.
