@@ -27,7 +27,7 @@ The live JARVIS Supabase project currently has its initial owner-scoped schema m
 
 ## Run locally
 
-Requirements: Node.js 20 or newer.
+Requirements: Node.js 22 or newer.
 
 ```bash
 npm install
