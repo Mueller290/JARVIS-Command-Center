@@ -40,7 +40,7 @@ Open the local URL printed by Next.js. Set these environment variables in `.env.
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-Configure the Supabase Auth URL allow-list to include your local callback (for example `http://localhost:3000/auth/callback`) and the eventual deployed callback URL. The sign-in page sends a magic link to the owner email. Never place service-role keys or AI provider secrets in browser code or commit `.env.local`.
+Configure the Supabase Auth URL allow-list to include your local callback (for example `http://localhost:3000/auth/callback`) and the eventual deployed callback URL. The sign-in page sends a magic link only to an existing Supabase Auth user (`shouldCreateUser: false`); self-service account creation is disabled in the app. Create/invite the owner account in Supabase first and disable public sign-ups in Auth settings. Never place service-role keys or AI provider secrets in browser code or commit `.env.local`.
 
 ## Safety and company boundaries
 
